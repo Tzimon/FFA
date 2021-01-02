@@ -50,6 +50,11 @@ public class CustomPlayer {
 
         player.getInventory().clear();
         player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword").build());
+        player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§fSnowball").build());
+        player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick").build());
+        player.getInventory().setItem(6, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").build());
+        player.getInventory().setItem(7, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").build());
+        player.getInventory().setItem(8, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").build());
     }
 
 }

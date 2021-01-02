@@ -1,8 +1,0 @@
-name: FFA
-version: "1.0"
-main: de.tzimon.ffa.FFA
-author: Tzimon
-authors:
-  - Skylike
-
-commands:
