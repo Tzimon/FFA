@@ -4,14 +4,16 @@ import de.tzimon.ffa.utils.CustomPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class PlayerJoinEventListener implements Listener {
+public class PlayerDeathEventListener implements Listener {
 
     @EventHandler
-    public void handlePlayerJoinEvent(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+    public void handlePlayerDeathEvent(PlayerDeathEvent event) {
+        Player player = event.getEntity();
         CustomPlayer customPlayer = CustomPlayer.get(player);
+
+        event.setKeepInventory(true);
 
         customPlayer.preparePlayer();
         customPlayer.teleportToSpawn();

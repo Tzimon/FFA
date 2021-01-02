@@ -6,3 +6,9 @@ authors:
   - Skylike
 
 commands:
+  setspawn:
+    usage: /setspawn
+    description: Sets the spawn
+  setdeathheight:
+    usage: /setdeathheight
+    description: Sets the death height
