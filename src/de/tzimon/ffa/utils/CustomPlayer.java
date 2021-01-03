@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -63,11 +64,13 @@ public class CustomPlayer {
         player.setLevel(0);
         player.setExp(0);
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+        player.setFireTicks(0);
 
         enderPearls.forEach(EnderPearl::remove);
         enderPearls.clear();
 
         player.getInventory().clear();
+        player.getInventory().setHeldItemSlot(0);
         player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
                 .addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
         player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
@@ -93,6 +96,8 @@ public class CustomPlayer {
 
         if (plugin.getConfig().contains("locations.spawn"))
             player.teleport((Location) plugin.getConfig().get("locations.spawn"));
+
+        player.setVelocity(new Vector(0, 0, 0));
     }
 
     public void addEnderPearl(EnderPearl enderPearl) {

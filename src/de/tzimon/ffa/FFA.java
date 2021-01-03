@@ -1,14 +1,17 @@
 package de.tzimon.ffa;
 
-import de.tzimon.ffa.commands.SetDeathHeightCommand;
+import de.tzimon.ffa.commands.SetHeightCommand;
 import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
+import de.tzimon.ffa.utils.BreakBlockScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class FFA extends JavaPlugin {
 
     private static FFA plugin;
+
+    private BreakBlockScheduler breakBlockScheduler;
 
     public String prefix = "§6Xivar §8┃ §r";
     public String noPlayer = "§cDu musst ein Spieler sein";
@@ -21,21 +24,31 @@ public class FFA extends JavaPlugin {
     }
 
     public void onEnable() {
+        breakBlockScheduler = new BreakBlockScheduler();
+
         loadConfig();
         loadListeners();
         loadCommands();
     }
 
+    public void onDisable() {
+        breakBlockScheduler.stop();
+    }
+
     private void loadConfig() {
-        getConfig().addDefault("heights.death", 0);
+        for (SetHeightCommand.Type type : SetHeightCommand.Type.values()) {
+            getConfig().addDefault("heights." + type.name, type.defaultHeight);
+        }
 
         getConfig().options().copyDefaults(true);
         saveConfig();
     }
 
     private void loadListeners() {
+        Bukkit.getPluginManager().registerEvents(new BlockEventsListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryClickEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDropPickupEventsListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerItemDamageEventListener(), this);
@@ -46,12 +59,16 @@ public class FFA extends JavaPlugin {
     }
 
     private void loadCommands() {
-        getCommand("setdeathheight").setExecutor(new SetDeathHeightCommand());
+        getCommand("setheight").setExecutor(new SetHeightCommand());
         getCommand("setspawn").setExecutor(new SetSpawnCommand());
     }
 
     public static FFA getPlugin() {
         return plugin;
+    }
+
+    public BreakBlockScheduler getBreakBlockScheduler() {
+        return breakBlockScheduler;
     }
 
 }
