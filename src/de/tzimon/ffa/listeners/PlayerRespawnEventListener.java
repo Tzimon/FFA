@@ -11,9 +11,8 @@ public class PlayerRespawnEventListener implements Listener {
     @EventHandler
     public void handlePlayerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        CustomPlayer customPlayer = CustomPlayer.get(player);
 
-        customPlayer.preparePlayer();
+        CustomPlayer.preparePlayer(player);
     }
 
 }

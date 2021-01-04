@@ -41,8 +41,8 @@ public class EntityDamageEventListener implements Listener {
             if (customPlayer.isBuildMode())
                 return;
 
-            customPlayer.preparePlayer();
-            customPlayer.teleportToSpawn();
+            CustomPlayer.preparePlayer(player);
+            CustomPlayer.teleportToSpawn(player);
         }
     }
 

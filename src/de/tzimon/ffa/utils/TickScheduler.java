@@ -8,8 +8,9 @@ import org.bukkit.block.Block;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BreakBlockScheduler {
+public class TickScheduler {
 
+    public static final long TIME_OF_DAY = 6000;
     public static final long TIME_RED = 3000;
     public static final long TIME_DISAPPEAR = 5000;
 
@@ -17,7 +18,7 @@ public class BreakBlockScheduler {
 
     private Map<Block, Long> blocks;
 
-    public BreakBlockScheduler() {
+    public TickScheduler() {
         plugin = FFA.getPlugin();
 
         blocks = new HashMap<>();
@@ -27,6 +28,13 @@ public class BreakBlockScheduler {
 
     private void start() {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            Bukkit.getWorlds().forEach(world -> {
+                world.setTime(TIME_OF_DAY);
+                world.setStorm(false);
+                world.setThundering(false);
+                world.setWeatherDuration(20);
+            });
+
             long currentTime = System.currentTimeMillis();
 
             blocks.forEach((block, time) -> {

@@ -4,7 +4,7 @@ import de.tzimon.ffa.commands.BuildCommand;
 import de.tzimon.ffa.commands.SetHeightCommand;
 import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
-import de.tzimon.ffa.utils.BreakBlockScheduler;
+import de.tzimon.ffa.utils.TickScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -12,7 +12,7 @@ public class FFA extends JavaPlugin {
 
     private static FFA plugin;
 
-    private BreakBlockScheduler breakBlockScheduler;
+    private TickScheduler tickScheduler;
 
     public String prefix = "§6Xivar §8┃ §r";
     public String noPlayer = "§cYou have to be a player";
@@ -25,7 +25,7 @@ public class FFA extends JavaPlugin {
     }
 
     public void onEnable() {
-        breakBlockScheduler = new BreakBlockScheduler();
+        tickScheduler = new TickScheduler();
 
         loadConfig();
         loadListeners();
@@ -33,7 +33,7 @@ public class FFA extends JavaPlugin {
     }
 
     public void onDisable() {
-        breakBlockScheduler.stop();
+        tickScheduler.stop();
     }
 
     private void loadConfig() {
@@ -69,8 +69,8 @@ public class FFA extends JavaPlugin {
         return plugin;
     }
 
-    public BreakBlockScheduler getBreakBlockScheduler() {
-        return breakBlockScheduler;
+    public TickScheduler getBreakBlockScheduler() {
+        return tickScheduler;
     }
 
 }

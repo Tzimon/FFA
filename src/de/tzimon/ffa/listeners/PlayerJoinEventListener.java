@@ -11,10 +11,9 @@ public class PlayerJoinEventListener implements Listener {
     @EventHandler
     public void handlePlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        CustomPlayer customPlayer = CustomPlayer.get(player);
 
-        customPlayer.preparePlayer();
-        customPlayer.teleportToSpawn();
+        CustomPlayer.preparePlayer(player);
+        CustomPlayer.teleportToSpawn(player);
     }
 
 }
