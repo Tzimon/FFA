@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 
 public enum Usage {
 
-    SET_HEIGHT;
+    BUILD, SET_HEIGHT;
 
     private FFA plugin;
 
@@ -17,6 +17,10 @@ public enum Usage {
         sendTitle(sender);
 
         switch (this) {
+            case BUILD:
+                sendLine(sender, "build" , "Toggles the build mode");
+                sendLine(sender, "build <Player>" , "Toggles the build mode for another player");
+                break;
             case SET_HEIGHT:
                 sendLine(sender, "setheight death <Height>", "Sets the height below which players will die");
                 sendLine(sender, "setheight game <Height>", "Sets the height below which players will be able to fight");

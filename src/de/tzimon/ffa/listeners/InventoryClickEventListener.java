@@ -1,5 +1,6 @@
 package de.tzimon.ffa.listeners;
 
+import de.tzimon.ffa.utils.CustomPlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,10 @@ public class InventoryClickEventListener implements Listener {
         if (!(entity instanceof Player))
             return;
 
-        event.setCancelled(true);
+        Player player = (Player) entity;
+        CustomPlayer customPlayer = CustomPlayer.get(player);
+
+        event.setCancelled(!customPlayer.isBuildMode());
     }
 
 }

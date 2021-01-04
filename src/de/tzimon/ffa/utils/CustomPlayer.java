@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -20,7 +21,8 @@ public class CustomPlayer {
 
     private UUID uuid;
 
-    private Set<EnderPearl> enderPearls;
+    private boolean buildMode;
+    private Set<Projectile> projectiles;
 
     public static CustomPlayer get(Player player) {
         return get(player.getUniqueId());
@@ -37,7 +39,7 @@ public class CustomPlayer {
         plugin = FFA.getPlugin();
 
         this.uuid = uuid;
-        this.enderPearls = new HashSet<>();
+        this.projectiles = new HashSet<>();
     }
 
     private Player getPlayer() {
@@ -55,37 +57,41 @@ public class CustomPlayer {
         if (player == null)
             return;
 
-        player.setGameMode(GameMode.SURVIVAL);
-        player.setHealth(20d);
-        player.setFoodLevel(20);
-        player.setSaturation(20);
-        player.setFlying(false);
-        player.setAllowFlight(false);
-        player.setLevel(0);
-        player.setExp(0);
-        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-        player.setFireTicks(0);
+        if (buildMode) {
+            player.setGameMode(GameMode.CREATIVE);
+        } else {
+            player.setGameMode(GameMode.SURVIVAL);
+            player.setHealth(20d);
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+            player.setFlying(false);
+            player.setAllowFlight(false);
+            player.setLevel(0);
+            player.setExp(0);
+            player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+            player.setFireTicks(0);
 
-        enderPearls.forEach(EnderPearl::remove);
-        enderPearls.clear();
+            projectiles.forEach(Projectile::remove);
+            projectiles.clear();
 
-        player.getInventory().clear();
-        player.getInventory().setHeldItemSlot(0);
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
-        player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
-        player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick")
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build());
-        player.getInventory().setItem(4, new ItemBuilder(Material.ENDER_PEARL).setDisplayName("§6Pearl").build());
-        player.getInventory().setItem(6, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setItem(7, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setItem(8, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).setDisplayName("§6Boots")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
-        player.getInventory().setLeggings(new ItemBuilder(Material.GOLD_LEGGINGS).setDisplayName("§6Leggings")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
-        player.getInventory().setChestplate(new ItemBuilder(Material.GOLD_CHESTPLATE).setDisplayName("§6Chestplate")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+            player.getInventory().clear();
+            player.getInventory().setHeldItemSlot(0);
+            player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
+                    .addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
+            player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
+            player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick")
+                    .addEnchantment(Enchantment.KNOCKBACK, 1).build());
+            player.getInventory().setItem(4, new ItemBuilder(Material.ENDER_PEARL).setDisplayName("§6Pearl").build());
+            player.getInventory().setItem(6, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setItem(7, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setItem(8, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).setDisplayName("§6Boots")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+            player.getInventory().setLeggings(new ItemBuilder(Material.GOLD_LEGGINGS).setDisplayName("§6Leggings")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+            player.getInventory().setChestplate(new ItemBuilder(Material.GOLD_CHESTPLATE).setDisplayName("§6Chestplate")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+        }
     }
 
     public void teleportToSpawn() {
@@ -100,8 +106,19 @@ public class CustomPlayer {
         player.setVelocity(new Vector(0, 0, 0));
     }
 
-    public void addEnderPearl(EnderPearl enderPearl) {
-        enderPearls.add(enderPearl);
+    public boolean toggleBuildMode() {
+        buildMode = !buildMode;
+        preparePlayer();
+
+        return buildMode;
+    }
+
+    public boolean isBuildMode() {
+        return buildMode;
+    }
+
+    public void addProjectile(Projectile projectile) {
+        projectiles.add(projectile);
     }
 
 }

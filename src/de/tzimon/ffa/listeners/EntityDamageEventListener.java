@@ -27,7 +27,7 @@ public class EntityDamageEventListener implements Listener {
         Player player = (Player) entity;
         CustomPlayer customPlayer = CustomPlayer.get(player);
 
-        if (player.getLocation().getBlockY() > plugin.getConfig().getInt("heights." + SetHeightCommand.Type.GAME.name)) {
+        if (player.getLocation().getBlockY() + 1 > plugin.getConfig().getInt("heights." + SetHeightCommand.Type.GAME.name)) {
             event.setCancelled(true);
             return;
         }
@@ -37,6 +37,9 @@ public class EntityDamageEventListener implements Listener {
 
         if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             event.setCancelled(true);
+
+            if (customPlayer.isBuildMode())
+                return;
 
             customPlayer.preparePlayer();
             customPlayer.teleportToSpawn();

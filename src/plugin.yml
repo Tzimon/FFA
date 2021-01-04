@@ -6,9 +6,12 @@ authors:
   - Skylike
 
 commands:
-  setspawn:
-    usage: /setspawn
-    description: Sets the spawn
+  build:
+    usage: /build [Player]
+    description: Toggles the build mode
   setheight:
     usage: /setheight death|game
     description: Sets heights
+  setspawn:
+    usage: /setspawn
+    description: Sets the spawn

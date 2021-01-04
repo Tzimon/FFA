@@ -1,5 +1,6 @@
 package de.tzimon.ffa;
 
+import de.tzimon.ffa.commands.BuildCommand;
 import de.tzimon.ffa.commands.SetHeightCommand;
 import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
@@ -14,10 +15,10 @@ public class FFA extends JavaPlugin {
     private BreakBlockScheduler breakBlockScheduler;
 
     public String prefix = "§6Xivar §8┃ §r";
-    public String noPlayer = "§cDu musst ein Spieler sein";
-    public String noPermission = "§cDu hast keine Rechte dazu";
-//    public String playerNotOnline = "§cDer Spieler ist nicht online";
-    public String invalidNumber = "§c%number% ist keine gültige Zahl";
+    public String noPlayer = "§cYou have to be a player";
+    public String noPermission = "§cYou don't have the permissions to do that";
+    public String playerNotOnline = "§cThat player is not online";
+    public String invalidNumber = "§c%number% is not a valid number";
 
     public FFA() {
         plugin = this;
@@ -59,6 +60,7 @@ public class FFA extends JavaPlugin {
     }
 
     private void loadCommands() {
+        getCommand("build").setExecutor(new BuildCommand());
         getCommand("setheight").setExecutor(new SetHeightCommand());
         getCommand("setspawn").setExecutor(new SetSpawnCommand());
     }

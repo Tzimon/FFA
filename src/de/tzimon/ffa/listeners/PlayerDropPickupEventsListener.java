@@ -1,5 +1,7 @@
 package de.tzimon.ffa.listeners;
 
+import de.tzimon.ffa.utils.CustomPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -9,12 +11,18 @@ public class PlayerDropPickupEventsListener implements Listener {
 
     @EventHandler
     public void handlePlayerDropItemEvent(PlayerDropItemEvent event) {
-        event.setCancelled(true);
+        Player player = event.getPlayer();
+        CustomPlayer customPlayer = CustomPlayer.get(player);
+
+        event.setCancelled(!customPlayer.isBuildMode());
     }
 
     @EventHandler
     public void handlePlayerPickupItemEvent(PlayerPickupItemEvent event) {
-        event.setCancelled(true);
+        Player player = event.getPlayer();
+        CustomPlayer customPlayer = CustomPlayer.get(player);
+
+        event.setCancelled(!customPlayer.isBuildMode());
     }
 
 }
