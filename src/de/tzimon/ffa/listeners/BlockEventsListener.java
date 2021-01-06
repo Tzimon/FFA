@@ -1,8 +1,10 @@
 package de.tzimon.ffa.listeners;
 
 import de.tzimon.ffa.FFA;
-import de.tzimon.ffa.commands.SetHeightCommand;
+import de.tzimon.ffa.commands.SetValueCommand;
 import de.tzimon.ffa.utils.CustomPlayer;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,9 +27,22 @@ public class BlockEventsListener implements Listener {
         if (customPlayer.isBuildMode())
             return;
 
-        int gameHeight = plugin.getConfig().getInt("heights." + SetHeightCommand.Type.GAME.name);
+        if (event.getBlockReplacedState().getType() != Material.AIR) {
+            event.setCancelled(true);
+            return;
+        }
 
-        if (player.getLocation().getBlockY() < gameHeight)
+        int gameHeight = plugin.getConfig().getInt("values." + SetValueCommand.Type.GAME.name);
+        int buildLength = plugin.getConfig().getInt("values." + SetValueCommand.Type.BUILD.name);
+
+        Location playerLocation = player.getLocation();
+        boolean inGameArea = playerLocation.getX() >= -buildLength
+                && playerLocation.getX() <= buildLength
+                && playerLocation.getY() < gameHeight
+                && playerLocation.getZ() >= -buildLength
+                && playerLocation.getZ() <= buildLength;
+
+        if (inGameArea)
             plugin.getBreakBlockScheduler().addBlock(event.getBlock());
         else
             event.setCancelled(true);

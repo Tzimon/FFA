@@ -6,16 +6,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class SetHeightCommand implements CommandExecutor {
+public class SetValueCommand implements CommandExecutor {
 
     private FFA plugin;
 
-    public SetHeightCommand() {
+    public SetValueCommand() {
         plugin = FFA.getPlugin();
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("xivar.setheight")) {
+        if (!sender.hasPermission("xivar.setvalue")) {
             sender.sendMessage(plugin.prefix + plugin.noPermission);
             return true;
         }
@@ -48,15 +48,15 @@ public class SetHeightCommand implements CommandExecutor {
             return true;
         }
 
-        plugin.getConfig().set("heights." + type.name, height);
+        plugin.getConfig().set("values." + type.name, height);
         plugin.saveConfig();
 
-        sender.sendMessage(plugin.prefix + "§7The " + type.name + " height was set to §6" + args[1]);
+        sender.sendMessage(plugin.prefix + "§7The " + type.name + " value was set to §6" + args[1]);
         return true;
     }
 
     public enum Type {
-        DEATH("death", 0), GAME("game", 180);
+        DEATH("death", 0), GAME("game", 180), BUILD("build", 100);
 
         public final String name;
         public final int defaultHeight;

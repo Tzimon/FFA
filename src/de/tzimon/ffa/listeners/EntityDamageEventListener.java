@@ -1,7 +1,7 @@
 package de.tzimon.ffa.listeners;
 
 import de.tzimon.ffa.FFA;
-import de.tzimon.ffa.commands.SetHeightCommand;
+import de.tzimon.ffa.commands.SetValueCommand;
 import de.tzimon.ffa.utils.CustomPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,7 +27,7 @@ public class EntityDamageEventListener implements Listener {
         Player player = (Player) entity;
         CustomPlayer customPlayer = CustomPlayer.get(player);
 
-        if (player.getLocation().getBlockY() + 1 > plugin.getConfig().getInt("heights." + SetHeightCommand.Type.GAME.name)) {
+        if (player.getLocation().getBlockY() + 1 > plugin.getConfig().getInt("values." + SetValueCommand.Type.GAME.name)) {
             event.setCancelled(true);
             return;
         }

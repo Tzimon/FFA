@@ -6,25 +6,41 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class ItemBuilder {
 
     private Material material;
-    private String displayName;
     private int amount;
+    private short subId;
+    private String displayName;
+    private List<String> lore;
     private Map<Enchantment, Integer> enchantments;
     private Set<ItemFlag> itemFlags;
 
+    private ItemBuilder() {
+        this(Material.AIR);
+    }
+
     public ItemBuilder(Material material) {
         this.material = material;
-        this.displayName = "";
+        this.subId = 0;
         this.amount = 1;
+        this.displayName = "";
+        lore = new ArrayList<>();
         this.enchantments = new HashMap<>();
         this.itemFlags = new HashSet<>();
+    }
+
+    public ItemBuilder setAmount(int amount) {
+        this.amount = amount;
+        return this;
+    }
+
+    public ItemBuilder setSubId(short subId) {
+        this.subId = subId;
+        return this;
     }
 
     public ItemBuilder setDisplayName(String displayName) {
@@ -32,8 +48,8 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setAmount(int amount) {
-        this.amount = amount;
+    public ItemBuilder addLore(String... lore) {
+        Collections.addAll(this.lore, lore);
         return this;
     }
 
@@ -47,20 +63,21 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder hideAll() {
-        return addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-                .addItemFlag(ItemFlag.HIDE_ENCHANTS)
-                .addItemFlag(ItemFlag.HIDE_DESTROYS)
-                .addItemFlag(ItemFlag.HIDE_PLACED_ON)
-                .addItemFlag(ItemFlag.HIDE_POTION_EFFECTS)
-                .addItemFlag(ItemFlag.HIDE_UNBREAKABLE);
-    }
+//    public ItemBuilder hideAll() {
+//        return addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+//                .addItemFlag(ItemFlag.HIDE_ENCHANTS)
+//                .addItemFlag(ItemFlag.HIDE_DESTROYS)
+//                .addItemFlag(ItemFlag.HIDE_PLACED_ON)
+//                .addItemFlag(ItemFlag.HIDE_POTION_EFFECTS)
+//                .addItemFlag(ItemFlag.HIDE_UNBREAKABLE);
+//    }
 
     public ItemStack build() {
-        ItemStack itemStack = new ItemStack(material, amount);
+        ItemStack itemStack = new ItemStack(material, amount, subId);
         ItemMeta itemMeta = itemStack.getItemMeta();
 
         itemMeta.setDisplayName(displayName);
+        itemMeta.setLore(lore);
         itemFlags.forEach(itemMeta::addItemFlags);
 
         itemStack.setItemMeta(itemMeta);
@@ -68,6 +85,20 @@ public class ItemBuilder {
         itemStack.addUnsafeEnchantments(enchantments);
 
         return itemStack;
+    }
+
+    public ItemBuilder clone() {
+        ItemBuilder clone = new ItemBuilder();
+
+        for (Field field : getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+
+            try {
+                field.set(clone, field.get(this));
+            } catch (IllegalAccessException ignored) {}
+        }
+
+        return clone;
     }
 
 }

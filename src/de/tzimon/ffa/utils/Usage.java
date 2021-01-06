@@ -22,8 +22,9 @@ public enum Usage {
                 sendLine(sender, "build <Player>" , "Toggles the build mode for another player");
                 break;
             case SET_HEIGHT:
-                sendLine(sender, "setheight death <Height>", "Sets the height below which players will die");
-                sendLine(sender, "setheight game <Height>", "Sets the height below which players will be able to fight");
+                sendLine(sender, "setvalue death <Height>", "Sets the height below which players will die");
+                sendLine(sender, "setvalue game <Height>", "Sets the height below which players will be able to fight");
+                sendLine(sender, "setvalue build <Length>", "Sets the length of the area around the spawn where players can build");
                 break;
             default:
                 sender.sendMessage(plugin.prefix + "§cNo help available");

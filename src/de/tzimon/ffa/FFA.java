@@ -1,9 +1,10 @@
 package de.tzimon.ffa;
 
 import de.tzimon.ffa.commands.BuildCommand;
-import de.tzimon.ffa.commands.SetHeightCommand;
+import de.tzimon.ffa.commands.SetValueCommand;
 import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
+import de.tzimon.ffa.utils.CustomPlayer;
 import de.tzimon.ffa.utils.TickScheduler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +28,8 @@ public class FFA extends JavaPlugin {
     public void onEnable() {
         tickScheduler = new TickScheduler();
 
+        Bukkit.getOnlinePlayers().forEach(CustomPlayer::preparePlayer);
+
         loadConfig();
         loadListeners();
         loadCommands();
@@ -37,8 +40,8 @@ public class FFA extends JavaPlugin {
     }
 
     private void loadConfig() {
-        for (SetHeightCommand.Type type : SetHeightCommand.Type.values()) {
-            getConfig().addDefault("heights." + type.name, type.defaultHeight);
+        for (SetValueCommand.Type type : SetValueCommand.Type.values()) {
+            getConfig().addDefault("values." + type.name, type.defaultHeight);
         }
 
         getConfig().options().copyDefaults(true);
@@ -47,6 +50,7 @@ public class FFA extends JavaPlugin {
 
     private void loadListeners() {
         Bukkit.getPluginManager().registerEvents(new BlockEventsListener(), this);
+        Bukkit.getPluginManager().registerEvents(new EntityDamageByEntityEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickEventListener(), this);
@@ -61,8 +65,8 @@ public class FFA extends JavaPlugin {
 
     private void loadCommands() {
         getCommand("build").setExecutor(new BuildCommand());
-        getCommand("setheight").setExecutor(new SetHeightCommand());
         getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        getCommand("setvalue").setExecutor(new SetValueCommand());
     }
 
     public static FFA getPlugin() {

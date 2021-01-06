@@ -6,7 +6,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
@@ -78,10 +77,17 @@ public class CustomPlayer {
     }
 
     public static void prepareInventory(Player player) {
-        player.getInventory().clear();
-        player.getInventory().setHeldItemSlot(0);
+        prepareInventory(player, true);
+    }
+
+    public static void prepareInventory(Player player, boolean clear) {
+        if (clear) {
+            player.getInventory().clear();
+            player.getInventory().setHeldItemSlot(0);
+        }
+
         player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
-                .addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
+                .addLore("", "§eRightclick: §7Block snowballs").addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
         player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
         player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick")
                 .addEnchantment(Enchantment.KNOCKBACK, 1).build());

@@ -9,9 +9,9 @@ commands:
   build:
     usage: /build [Player]
     description: Toggles the build mode
-  setheight:
-    usage: /setheight death|game
-    description: Sets heights
+  setvalue:
+    usage: /setvalue death|game
+    description: Sets values
   setspawn:
     usage: /setspawn
     description: Sets the spawn
