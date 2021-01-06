@@ -6,6 +6,7 @@ import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
 import de.tzimon.ffa.utils.CustomPlayer;
 import de.tzimon.ffa.utils.TickScheduler;
+import de.tzimon.ffa.utils.Value;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,8 +41,8 @@ public class FFA extends JavaPlugin {
     }
 
     private void loadConfig() {
-        for (SetValueCommand.Type type : SetValueCommand.Type.values()) {
-            getConfig().addDefault("values." + type.name, type.defaultHeight);
+        for (Value value : Value.values()) {
+            getConfig().addDefault("values." + value.name, value.defaultValue);
         }
 
         getConfig().options().copyDefaults(true);
@@ -56,6 +57,7 @@ public class FFA extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryClickEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDeathEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerDropPickupEventsListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerInteractEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerItemDamageEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(), this);

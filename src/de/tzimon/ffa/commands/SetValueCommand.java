@@ -2,6 +2,7 @@ package de.tzimon.ffa.commands;
 
 import de.tzimon.ffa.FFA;
 import de.tzimon.ffa.utils.Usage;
+import de.tzimon.ffa.utils.Value;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,37 +35,25 @@ public class SetValueCommand implements CommandExecutor {
             return true;
         }
 
-        Type type = null;
+        Value value = null;
 
-        for (Type current : Type.values()) {
+        for (Value current : Value.values()) {
             if (current.name.equalsIgnoreCase(args[0])) {
-                type = current;
+                value = current;
                 break;
             }
         }
 
-        if (type == null) {
+        if (value == null) {
             Usage.SET_HEIGHT.send(sender);
             return true;
         }
 
-        plugin.getConfig().set("values." + type.name, height);
+        plugin.getConfig().set("values." + value.name, height);
         plugin.saveConfig();
 
-        sender.sendMessage(plugin.prefix + "§7The " + type.name + " value was set to §6" + args[1]);
+        sender.sendMessage(plugin.prefix + "§7The " + value.name + " value was set to §6" + args[1]);
         return true;
-    }
-
-    public enum Type {
-        DEATH("death", 0), GAME("game", 180), BUILD("build", 100);
-
-        public final String name;
-        public final int defaultHeight;
-
-        Type(String name, int defaultHeight) {
-            this.name = name;
-            this.defaultHeight = defaultHeight;
-        }
     }
 
 }

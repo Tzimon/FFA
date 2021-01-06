@@ -1,8 +1,8 @@
 package de.tzimon.ffa.listeners;
 
 import de.tzimon.ffa.FFA;
-import de.tzimon.ffa.commands.SetValueCommand;
 import de.tzimon.ffa.utils.CustomPlayer;
+import de.tzimon.ffa.utils.Value;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +27,7 @@ public class EntityDamageEventListener implements Listener {
         Player player = (Player) entity;
         CustomPlayer customPlayer = CustomPlayer.get(player);
 
-        if (player.getLocation().getBlockY() + 1 > plugin.getConfig().getInt("values." + SetValueCommand.Type.GAME.name)) {
+        if (player.getLocation().getY() + 1.5d > plugin.getConfig().getInt("values." + Value.GAME.name)) {
             event.setCancelled(true);
             return;
         }
