@@ -35,12 +35,12 @@ public class BlockEventsListener implements Listener {
         int gameHeight = plugin.getConfig().getInt("values." + Value.GAME.name);
         int buildLength = plugin.getConfig().getInt("values." + Value.BUILD.name);
 
-        Location playerLocation = player.getLocation();
-        boolean inGameArea = playerLocation.getX() >= -buildLength
-                && playerLocation.getX() <= buildLength
-                && playerLocation.getY() < gameHeight
-                && playerLocation.getZ() >= -buildLength
-                && playerLocation.getZ() <= buildLength;
+        Location location = event.getBlock().getLocation();
+        boolean inGameArea = location.getX() >= -buildLength
+                && location.getX() <= buildLength
+                && location.getY() < gameHeight
+                && location.getZ() >= -buildLength
+                && location.getZ() <= buildLength;
 
         if (inGameArea)
             plugin.getBreakBlockScheduler().addBlock(event.getBlock());

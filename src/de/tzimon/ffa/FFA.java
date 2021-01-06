@@ -16,6 +16,8 @@ public class FFA extends JavaPlugin {
 
     private TickScheduler tickScheduler;
 
+    public static final String LOBBY_SERVER_NAME = "Lobby";
+
     public String prefix = "§6Xivar §8┃ §r";
     public String noPlayer = "§cYou have to be a player";
     public String noPermission = "§cYou don't have the permissions to do that";
@@ -30,6 +32,8 @@ public class FFA extends JavaPlugin {
         tickScheduler = new TickScheduler();
 
         Bukkit.getOnlinePlayers().forEach(CustomPlayer::preparePlayer);
+
+        Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         loadConfig();
         loadListeners();

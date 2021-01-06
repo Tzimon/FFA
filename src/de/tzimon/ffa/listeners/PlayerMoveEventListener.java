@@ -24,6 +24,9 @@ public class PlayerMoveEventListener implements Listener {
         if (customPlayer.isBuildMode())
             return;
 
+        if (CustomPlayer.isAtSpawn(event.getFrom().getY()) && !CustomPlayer.isAtSpawn(event.getTo().getY()))
+            CustomPlayer.prepareInventory(player, event.getTo().getY());
+
         if (player.getLocation().getBlockY() <= plugin.getConfig().getInt("heights." + Value.DEATH.name))
             player.setHealth(0);
     }

@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -16,7 +17,7 @@ public class CustomPlayer {
 
     private static Map<UUID, CustomPlayer> customPlayers = new HashMap<>();
 
-    private FFA plugin;
+    public static final int RETURN_TO_LOBBY_SLOT = 8;
 
     private UUID uuid;
 
@@ -37,8 +38,6 @@ public class CustomPlayer {
     }
 
     private CustomPlayer(UUID uuid) {
-        plugin = FFA.getPlugin();
-
         this.uuid = uuid;
         this.projectiles = new HashSet<>();
     }
@@ -77,30 +76,44 @@ public class CustomPlayer {
     }
 
     public static void prepareInventory(Player player) {
-        prepareInventory(player, true);
+        prepareInventory(player, true, player.getLocation().getY());
     }
 
     public static void prepareInventory(Player player, boolean clear) {
+        prepareInventory(player, clear, player.getLocation().getY());
+    }
+
+    public static void prepareInventory(Player player, double height) {
+        prepareInventory(player, true, height);
+    }
+
+    public static void prepareInventory(Player player, boolean clear, double height) {
         if (clear) {
             player.getInventory().clear();
+            player.getInventory().setArmorContents(new ItemStack[4]);
             player.getInventory().setHeldItemSlot(0);
         }
 
-        player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
-                .addLore("", "§eRightclick: §7Block snowballs").addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
-        player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
-        player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick")
-                .addEnchantment(Enchantment.KNOCKBACK, 1).build());
-        player.getInventory().setItem(4, new ItemBuilder(Material.ENDER_PEARL).setDisplayName("§6Pearl").build());
-        player.getInventory().setItem(6, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setItem(7, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setItem(8, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
-        player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).setDisplayName("§6Boots")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
-        player.getInventory().setLeggings(new ItemBuilder(Material.GOLD_LEGGINGS).setDisplayName("§6Leggings")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
-        player.getInventory().setChestplate(new ItemBuilder(Material.GOLD_CHESTPLATE).setDisplayName("§6Chestplate")
-                .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+        if (isAtSpawn(height)) {
+            player.getInventory().setItem(RETURN_TO_LOBBY_SLOT,
+                    new ItemBuilder(Material.MAGMA_CREAM).setDisplayName("§6Return to Lobby").build());
+        } else {
+            player.getInventory().setItem(0, new ItemBuilder(Material.GOLD_SWORD).setDisplayName("§6Sword")
+                    .addLore("", "§eRightclick: §7Block snowballs").addEnchantment(Enchantment.DAMAGE_ALL, 1).build());
+            player.getInventory().setItem(1, new ItemBuilder(Material.SNOW_BALL).setDisplayName("§6Snowball").setAmount(16).build());
+            player.getInventory().setItem(2, new ItemBuilder(Material.STICK).setDisplayName("§6Stick")
+                    .addEnchantment(Enchantment.KNOCKBACK, 1).build());
+            player.getInventory().setItem(4, new ItemBuilder(Material.ENDER_PEARL).setDisplayName("§6Pearl").build());
+            player.getInventory().setItem(6, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setItem(7, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setItem(8, new ItemBuilder(Material.SANDSTONE).setDisplayName("§6Sandstone").setAmount(64).build());
+            player.getInventory().setBoots(new ItemBuilder(Material.IRON_BOOTS).setDisplayName("§6Boots")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+            player.getInventory().setLeggings(new ItemBuilder(Material.GOLD_LEGGINGS).setDisplayName("§6Leggings")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+            player.getInventory().setChestplate(new ItemBuilder(Material.GOLD_CHESTPLATE).setDisplayName("§6Chestplate")
+                    .addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, 1).build());
+        }
     }
 
     public static void teleportToSpawn(Player player) {
@@ -127,6 +140,14 @@ public class CustomPlayer {
 
     public void addProjectile(Projectile projectile) {
         projectiles.add(projectile);
+    }
+
+    public static boolean isAtSpawn(Player player) {
+        return isAtSpawn(player.getLocation().getY());
+    }
+
+    public static boolean isAtSpawn(double y) {
+        return y > FFA.getPlugin().getConfig().getInt("values." + Value.GAME.name) + 1.5d;
     }
 
     public void setKillStreak(int killStreak) {

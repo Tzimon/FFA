@@ -22,7 +22,6 @@ public class PlayerDeathEventListener implements Listener {
 
     private static final int REGENERATION_TIME = 10;
 
-//    private final Map<Integer, ItemBuilder[]> streakRewards;
     private final Map<Integer, StreakReward> streakRewards;
 
     public PlayerDeathEventListener() {
