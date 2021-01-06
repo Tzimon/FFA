@@ -43,7 +43,7 @@ public class BlockEventsListener implements Listener {
                 && location.getZ() <= buildLength;
 
         if (inGameArea)
-            plugin.getBreakBlockScheduler().addBlock(event.getBlock());
+            plugin.getTickScheduler().addBlock(event.getBlock());
         else
             event.setCancelled(true);
     }

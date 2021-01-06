@@ -4,11 +4,13 @@ import de.tzimon.ffa.commands.BuildCommand;
 import de.tzimon.ffa.commands.SetValueCommand;
 import de.tzimon.ffa.commands.SetSpawnCommand;
 import de.tzimon.ffa.listeners.*;
+import de.tzimon.ffa.managers.ScoreboardManager;
 import de.tzimon.ffa.utils.CustomPlayer;
 import de.tzimon.ffa.utils.TickScheduler;
 import de.tzimon.ffa.utils.Value;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class FFA extends JavaPlugin {
 
@@ -31,7 +33,10 @@ public class FFA extends JavaPlugin {
     public void onEnable() {
         tickScheduler = new TickScheduler();
 
-        Bukkit.getOnlinePlayers().forEach(CustomPlayer::preparePlayer);
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            CustomPlayer.preparePlayer(player);
+            ScoreboardManager.createScoreboard(player);
+        });
 
         Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
@@ -65,6 +70,7 @@ public class FFA extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerItemDamageEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerMoveEventListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new ProjectileLaunchEventListener(), this);
     }
@@ -79,7 +85,7 @@ public class FFA extends JavaPlugin {
         return plugin;
     }
 
-    public TickScheduler getBreakBlockScheduler() {
+    public TickScheduler getTickScheduler() {
         return tickScheduler;
     }
 

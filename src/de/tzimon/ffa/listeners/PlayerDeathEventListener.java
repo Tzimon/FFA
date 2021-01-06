@@ -1,6 +1,7 @@
 package de.tzimon.ffa.listeners;
 
 import de.tzimon.ffa.FFA;
+import de.tzimon.ffa.managers.ScoreboardManager;
 import de.tzimon.ffa.utils.CustomPlayer;
 import de.tzimon.ffa.utils.ItemBuilder;
 import net.minecraft.server.v1_8_R1.EntityLightning;
@@ -48,6 +49,7 @@ public class PlayerDeathEventListener implements Listener {
         CustomPlayer customPlayer = CustomPlayer.get(player);
 
         customPlayer.setKillStreak(0);
+        ScoreboardManager.updateScoreboard(player);
 
         event.setKeepInventory(true);
 
@@ -80,6 +82,7 @@ public class PlayerDeathEventListener implements Listener {
 
             int killStreak = customKiller.getKillStreak() + 1;
             customKiller.setKillStreak(killStreak);
+            ScoreboardManager.updateScoreboard(killer);
 
             for (int streak : streakRewards.keySet()) {
                 if (killStreak == streak)
