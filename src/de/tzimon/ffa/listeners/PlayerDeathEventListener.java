@@ -79,6 +79,7 @@ public class PlayerDeathEventListener implements Listener {
 //            killer.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, REGENERATION_TIME * 20, 2));
             killer.setHealth(20d);
             CustomPlayer.prepareInventory(killer, false);
+            CustomPlayer.teleportToSpawn(player);
 
             int killStreak = customKiller.getKillStreak() + 1;
             customKiller.setKillStreak(killStreak);

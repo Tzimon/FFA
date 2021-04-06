@@ -26,7 +26,7 @@ public class ScoreboardManager {
         objective.getScore(" ").setScore(counter++);
         objective.getScore("§7> §bRank: ").setScore(counter++);
         objective.getScore("  ").setScore(counter++);
-        objective.getScore("§7> §bLobby").setScore(counter++);
+        objective.getScore("§7> §bFFA").setScore(counter++);
         objective.getScore("§1§7-----------").setScore(counter++);
 
         Team killStreakTeam = scoreboard.registerNewTeam("killStreak");
